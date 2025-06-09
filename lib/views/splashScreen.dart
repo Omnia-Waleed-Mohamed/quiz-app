@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quiz_app/views/onBoardingScreen.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
@@ -13,16 +14,19 @@ class SplashScreen extends StatelessWidget {
         child: Center(
           child: Column(
             children: [
-                  Text("Q",style:TextStyle(color: Color(0xffFFFFFF),
+                Text("Q",style:TextStyle(color: Color(0xffFFFFFF),
                   fontSize: 400,fontWeight: FontWeight.w400,fontFamily: 'Montserrat') ,),
 
                 SizedBox(height: 30,),
-                  ElevatedButton(onPressed:(){},
+                ElevatedButton(onPressed:(){
+                  Navigator.push(context, 
+                  MaterialPageRoute(builder: (context) => const OnBoardingScreen()),);
+                },
                   style: ElevatedButton.styleFrom(
-             fixedSize: Size(330, 60), 
-             shape: RoundedRectangleBorder(
-             borderRadius: BorderRadius.circular(35), ),
-              backgroundColor: Colors.white, ), child: Text("Get Started",style: TextStyle(
+                  fixedSize: Size(330, 60), 
+                  shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(35), ),
+                  backgroundColor: Colors.white, ), child: Text("Get Started",style: TextStyle(
                     color: Color(0xff3D003E),
                     fontSize: 22,fontFamily: 'Montserrat'
                   ),))

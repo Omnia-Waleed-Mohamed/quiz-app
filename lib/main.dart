@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quiz_app/views/onBoardingScreen.dart';
 import 'package:quiz_app/views/splashScreen.dart';
 
 void main(){
