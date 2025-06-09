@@ -8,7 +8,7 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView( // ده بيمنع الـ overflow مع الكيبورد
+        child: SingleChildScrollView( 
           child: Padding(
             padding: const EdgeInsets.only(top: 100),
             child: Column(
@@ -44,7 +44,7 @@ class LoginScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 80),
-                Padding( // ✅ تم حذف const من هنا
+                Padding( 
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
                   child: SizedBox(
                     height: 60,
@@ -66,7 +66,7 @@ class LoginScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(height: 30), // عشان لو في مساحة فاضية تحته
+                const SizedBox(height: 30), 
               ],
             ),
           ),
