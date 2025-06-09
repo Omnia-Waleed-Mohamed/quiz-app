@@ -1,6 +1,6 @@
-
 import 'package:flutter/material.dart';
 import 'package:quiz_app/models/onBoardingModel.dart';
+import 'package:quiz_app/views/loginScreen.dart';
 import 'package:quiz_app/widget/bottomNavigation.dart';
 import 'package:quiz_app/widget/onBoarding_pages.dart';
 
@@ -15,24 +15,24 @@ class OnBoardingScreen extends StatefulWidget {
 class _OnBoardingScreenState extends State<OnBoardingScreen> {
   final PageController _controller = PageController();
   double currentIndexPage = 0;
-final List<OnBoardingModel> pages = [
-  OnBoardingModel(
-    "assets/image/onboarding1.png",
-    "Welcome to QuizMaster!",
-    "Test your knowledge with fun and challenging quizzes across multiple categories.",
-  ),
-  OnBoardingModel(
-    "assets/image/onboarding2.png",
-    "Track Your Progress",
-    "Keep an eye on your score and improve with every attempt. Learn while playing!",
-  ),
-  OnBoardingModel(
-    "assets/image/onboarding3.png",
-    "Challenge Yourself",
-    "Take timed quizzes, unlock achievements, and compete with friends!",
-  ),
-];
 
+  final List<OnBoardingModel> pages = [
+    OnBoardingModel(
+      "assets/image/onboarding1.png",
+      "Welcome to QuizMaster!",
+      "Test your knowledge with fun and challenging quizzes across multiple categories.",
+    ),
+    OnBoardingModel(
+      "assets/image/onboarding2.png",
+      "Track Your Progress",
+      "Keep an eye on your score and improve with every attempt. Learn while playing!",
+    ),
+    OnBoardingModel(
+      "assets/image/onboarding3.png",
+      "Challenge Yourself",
+      "Take timed quizzes, unlock achievements, and compete with friends!",
+    ),
+  ];
 
   @override
   void initState() {
@@ -48,6 +48,13 @@ final List<OnBoardingModel> pages = [
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+
+  void goToLogin() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (_) => const LoginScreen()),
+    );
   }
 
   @override
@@ -66,12 +73,13 @@ final List<OnBoardingModel> pages = [
               duration: const Duration(milliseconds: 300),
               curve: Curves.easeIn,
             );
+          } else {
+            goToLogin();
           }
         },
-        onSkip: () {
-          _controller.jumpToPage(pages.length - 1);
-        },
+        onSkip: goToLogin,
       ),
     );
   }
 }
+
