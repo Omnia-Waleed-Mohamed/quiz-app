@@ -47,7 +47,7 @@ class OnBoardingPages extends StatelessWidget {
               Text(
                 page.description,
                 style: const TextStyle(
-                  fontSize: 21,
+                  fontSize: 16,
                   color:Color(0xff3D003E),
                   fontFamily: "Montserrat",
                   fontWeight: FontWeight.w400,
