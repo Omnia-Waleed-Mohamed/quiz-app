@@ -29,7 +29,7 @@ class CustomQuizAppBar extends StatelessWidget implements PreferredSizeWidget {
                 Text(
                   "Previous",
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 15,
                     color: Color(0xff473F97),
                     fontWeight: FontWeight.w600,
                     fontFamily: "Montserrat",

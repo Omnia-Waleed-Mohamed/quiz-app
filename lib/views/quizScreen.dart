@@ -1,4 +1,3 @@
-
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
@@ -7,7 +6,9 @@ import 'package:quiz_app/widget/appBarQuiz.dart';
 import 'package:quiz_app/widget/questionsList.dart';
 
 class QuizScreen extends StatefulWidget {
-  const QuizScreen({super.key});
+  final String userName;
+
+  const QuizScreen({super.key, required this.userName});
 
   @override
   State<QuizScreen> createState() => _QuizScreenState();
@@ -27,13 +28,13 @@ class _QuizScreenState extends State<QuizScreen> {
       setState(() {
         timeLeft--;
         if (timeLeft == 0) {
-          nextQuestion();
+          goToNext();
         }
       });
     });
   }
 
-  void nextQuestion() {
+  void goToNext() {
     if (selectedOption != -1) {
       userAnswers[currentIndex] =
           questionsList[currentIndex].answers[selectedOption];
@@ -50,7 +51,10 @@ class _QuizScreenState extends State<QuizScreen> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (_) => AnswerScreen(userAnswers: userAnswers),
+          builder: (_) => AnswerScreen(
+            userAnswers: userAnswers,
+            userName: widget.userName,
+          ),
         ),
       );
     }
@@ -109,7 +113,7 @@ class _QuizScreenState extends State<QuizScreen> {
                   ),
                 ),
                 Positioned(
-                  top: 0, // تعديل لتفادي overflow
+                  top: 0,
                   left: MediaQuery.of(context).size.width / 2 - 39,
                   child: Container(
                     width: 67,
@@ -122,7 +126,7 @@ class _QuizScreenState extends State<QuizScreen> {
                     child: CircularPercentIndicator(
                       radius: 41.0,
                       lineWidth: 6.0,
-                      percent: (30 - timeLeft) / 30, // تعديل الاتجاه
+                      percent: (30 - timeLeft) / 30,
                       animation: true,
                       animateFromLastPercent: true,
                       center: Text(
@@ -169,9 +173,9 @@ class _QuizScreenState extends State<QuizScreen> {
                         child: Text(
                           question.answers[i],
                           style: const TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500,
-                            color: Color(0xff2D2D2D),
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xff473F97),
                             fontFamily: "Montserrat",
                           ),
                         ),
@@ -193,7 +197,7 @@ class _QuizScreenState extends State<QuizScreen> {
               width: double.infinity,
               height: 50,
               child: ElevatedButton(
-                onPressed: selectedOption == -1 ? null : nextQuestion,
+                onPressed: selectedOption == -1 ? null : goToNext,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: selectedOption == -1
                       ? Colors.grey
@@ -202,9 +206,9 @@ class _QuizScreenState extends State<QuizScreen> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                child: const Text(
-                  "Next",
-                  style: TextStyle(
+                child: Text(
+                  currentIndex == questionsList.length - 1 ? "Finish" : "Next",
+                  style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                     fontFamily: "Montserrat",

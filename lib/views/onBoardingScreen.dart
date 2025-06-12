@@ -53,7 +53,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   void goToLogin() {
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (_) => const LoginScreen()),
+      MaterialPageRoute(builder: (_) =>  LoginScreen()),
     );
   }
 

@@ -3,13 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:quiz_app/views/quizScreen.dart';
 
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+  LoginScreen({super.key});
+
+  final TextEditingController nameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView( 
+        child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.only(top: 100),
             child: Column(
@@ -27,34 +29,45 @@ class LoginScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 30),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20.0),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
                   child: TextField(
+                    controller: nameController,
                     decoration: InputDecoration(
                       hintText: 'Enter your name',
-                      contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 16, horizontal: 12),
                       enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFF473F97), width: 1),
+                        borderSide:
+                            BorderSide(color: Color(0xFF473F97), width: 1),
                         borderRadius: BorderRadius.all(Radius.circular(8)),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFF473F97), width: 2),
+                        borderSide:
+                            BorderSide(color: Color(0xFF473F97), width: 2),
                         borderRadius: BorderRadius.all(Radius.circular(8)),
                       ),
                     ),
                   ),
                 ),
                 const SizedBox(height: 80),
-                Padding( 
+                Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
                   child: SizedBox(
                     height: 60,
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
-                         Navigator.push(
-                              context,
-                            MaterialPageRoute(builder: (context) => QuizScreen()),);
+                        if (nameController.text.trim().isNotEmpty) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => QuizScreen(
+                                userName: nameController.text.trim(),
+                              ),
+                            ),
+                          );
+                        }
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF473F97),
@@ -71,7 +84,7 @@ class LoginScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(height: 30), 
+                const SizedBox(height: 30),
               ],
             ),
           ),
@@ -80,5 +93,4 @@ class LoginScreen extends StatelessWidget {
     );
   }
 }
-
 
