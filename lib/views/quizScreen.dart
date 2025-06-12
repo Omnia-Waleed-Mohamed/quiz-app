@@ -1,6 +1,10 @@
+
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:quiz_app/views/answerScreen.dart';
 import 'package:quiz_app/widget/appBarQuiz.dart';
+import 'package:quiz_app/widget/questionsList.dart';
 
 class QuizScreen extends StatefulWidget {
   const QuizScreen({super.key});
@@ -10,34 +14,79 @@ class QuizScreen extends StatefulWidget {
 }
 
 class _QuizScreenState extends State<QuizScreen> {
+  int currentIndex = 0;
   int selectedOption = -1;
+  List<String?> userAnswers = List.filled(questionsList.length, null);
+  Timer? timer;
+  int timeLeft = 30;
 
-  List<String> options = [
-    "1986",
-    "1994",
-    "2002",
-    "2010",
-  ];
+  void startTimer() {
+    timeLeft = 30;
+    timer?.cancel();
+    timer = Timer.periodic(const Duration(seconds: 1), (Timer t) {
+      setState(() {
+        timeLeft--;
+        if (timeLeft == 0) {
+          nextQuestion();
+        }
+      });
+    });
+  }
+
+  void nextQuestion() {
+    if (selectedOption != -1) {
+      userAnswers[currentIndex] =
+          questionsList[currentIndex].answers[selectedOption];
+    }
+
+    if (currentIndex < questionsList.length - 1) {
+      setState(() {
+        currentIndex++;
+        selectedOption = -1;
+      });
+      startTimer();
+    } else {
+      timer?.cancel();
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) => AnswerScreen(userAnswers: userAnswers),
+        ),
+      );
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    startTimer();
+  }
+
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final question = questionsList[currentIndex];
+
     return Scaffold(
       backgroundColor: const Color(0xffEFF0F3),
-      appBar: const CustomQuizAppBar(title: "7/10"),
+      appBar: CustomQuizAppBar(title: "${currentIndex + 1}/${questionsList.length}"),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            // Stack to overlap circle over card
             Stack(
               clipBehavior: Clip.none,
               children: [
-                // Card with question
                 Container(
                   width: double.infinity,
-                  margin: const EdgeInsets.only(top: 40), // space for circle
+                  margin: const EdgeInsets.only(top: 40),
                   child: Card(
-                    color: Color.fromARGB(235, 255, 255, 255),
+                    color: const Color.fromARGB(235, 255, 255, 255),
                     elevation: 4,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
@@ -47,10 +96,10 @@ class _QuizScreenState extends State<QuizScreen> {
                       height: 190,
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       alignment: Alignment.center,
-                      child: const Text(
-                        "In what year did the United States host the FIFA World Cup for the first time?",
+                      child: Text(
+                        question.question,
                         textAlign: TextAlign.center,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
                           fontFamily: "Montserrat",
@@ -59,30 +108,26 @@ class _QuizScreenState extends State<QuizScreen> {
                     ),
                   ),
                 ),
-
                 Positioned(
-                  top: 0,
-                  left: MediaQuery.of(context).size.width / 2 -
-                      39, // خليها على حسب الـ radius
+                  top: 0, // تعديل لتفادي overflow
+                  left: MediaQuery.of(context).size.width / 2 - 39,
                   child: Container(
-                    width:
-                        78, // لازم يكون قطر الدايرة = radius * 2 + padding (اختياري)
-                    height: 78,
+                    width: 67,
+                    height: 90,
                     decoration: const BoxDecoration(
                       color: Colors.white,
                       shape: BoxShape.circle,
                     ),
-                    padding: const EdgeInsets.all(
-                        4), // padding داخلي صغير عشان الفل ميركبش على الدايرة
+                    padding: const EdgeInsets.all(4),
                     child: CircularPercentIndicator(
-                      radius: 39.0,
+                      radius: 41.0,
                       lineWidth: 6.0,
-                      percent: 0.75,
+                      percent: (30 - timeLeft) / 30, // تعديل الاتجاه
                       animation: true,
-                      animationDuration: 1200,
-                      center: const Text(
-                        "30",
-                        style: TextStyle(
+                      animateFromLastPercent: true,
+                      center: Text(
+                        "$timeLeft",
+                        style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                           color: Color(0xff473F97),
@@ -96,11 +141,8 @@ class _QuizScreenState extends State<QuizScreen> {
                 ),
               ],
             ),
-
             const SizedBox(height: 40),
-
-            // الخيارات
-            for (int i = 0; i < options.length; i++)
+            for (int i = 0; i < question.answers.length; i++)
               GestureDetector(
                 onTap: () {
                   setState(() {
@@ -112,9 +154,7 @@ class _QuizScreenState extends State<QuizScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   height: 50,
                   decoration: BoxDecoration(
-                    color: selectedOption == i
-                        ? const Color(0xffD7DBF5)
-                        : Colors.white,
+                    color: selectedOption == i ? const Color(0xffD7DBF5) : Colors.white,
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
                       color: selectedOption == i
@@ -127,7 +167,7 @@ class _QuizScreenState extends State<QuizScreen> {
                     children: [
                       Expanded(
                         child: Text(
-                          options[i],
+                          question.answers[i],
                           style: const TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w500,
@@ -148,19 +188,16 @@ class _QuizScreenState extends State<QuizScreen> {
                   ),
                 ),
               ),
-
             const Spacer(),
-
-            // زر Next
             SizedBox(
               width: double.infinity,
               height: 50,
               child: ElevatedButton(
-                onPressed: () {
-                  // logic للانتقال للسؤال التالي
-                },
+                onPressed: selectedOption == -1 ? null : nextQuestion,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xff473F97),
+                  backgroundColor: selectedOption == -1
+                      ? Colors.grey
+                      : const Color(0xff473F97),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
