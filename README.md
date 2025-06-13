@@ -36,3 +36,6 @@ The design is clean, responsive, and optimized for an engaging user experience.
 - **Responsive UI Design**
 
 ---
+
+## Demo of the application 
+https://github.com/user-attachments/assets/61249e72-7416-442f-bb29-cdaf4478ccfe
